@@ -18,8 +18,12 @@ if __name__ == '__main__':
         if streamName.lower() not in ignoreList and url != 'playapex':
             streams[streamName] = url
 
-    print('| Stream | URL |')
-    print('|-----|-----|')
+    # print('| Stream | URL |')
+    # print('|-----|-----|')
     for name in streams:
         url = streams[name]
-        print(f'| {name} | https://www.twitch.tv/{url} |')
+        # print(f'| {name} | https://www.twitch.tv/{url} |')
+
+        print(f'streamlink https://www.twitch.tv/{url} best --output "/mnt/pool/aDownloads/vods/ALGS Championships/tosort/ALGS Championships Raleigh - {name} Finals - ' + '{time:%Y-%m-%d}.mkv" &>/dev/null &')
+
+    print(len(streams))
