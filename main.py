@@ -1,10 +1,17 @@
 from bs4 import BeautifulSoup
 import re
+from selenium import webdriver
+import time
 
 if __name__ == '__main__':
+    url = "https://www.twitch.tv/playapex/commandcenter"
 
-    with open("parse.html", 'r') as file:
-        data = file.read()
+    driver = webdriver.Chrome()
+    driver.get(url)
+    time.sleep(10)
+    data = driver.page_source
+    driver.close()
+
     soup = BeautifulSoup(data, features="html.parser")
 
     streams = {"NiceWigg": 'nicewigg'}
