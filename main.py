@@ -3,22 +3,16 @@ import re
 from selenium import webdriver
 import time
 
-if __name__ == '__main__':
-    url = "https://www.twitch.tv/playapex/commandcenter"
-
+def getHTML(url):
     driver = webdriver.Chrome()
     driver.get(url)
     time.sleep(10)
     data = driver.page_source
     driver.close()
 
-    soup = BeautifulSoup(data, features="html.parser")
+    return data
 
-    streams = {"NiceWigg": 'nicewigg'}
-    ignoreList = ['playapex', 'bbl spanish', 'bbl portuguese',
-                  'nicewigg b stream', 'rage japanese',
-                  'maincast', 'fps thai', '4gamers mandarin ']
-
+def getStreamUrls(soup, streams, ignoreList):
     buttons = soup.find_all("button", attrs={'data-target': True})
     for button in buttons:
         url = button['data-target']
@@ -34,12 +28,37 @@ if __name__ == '__main__':
         if streamName.lower() not in ignoreList and url != 'playapex':
             streams[streamName] = url
 
-    # print('| Stream | URL |')
-    # print('|-----|-----|')
-    for name in streams:
-        url = streams[name]
-        # print(f'| {name} | https://www.twitch.tv/{url} |')
+    return streams
 
-        print(f'streamlink https://www.twitch.tv/{url} best --output "/mnt/pool/tempdownloads/vods/ALGS PL2 Week 1/tosort/ALGS PL2 Week 1 - {name} - ' + '{time:%Y-%m-%d}.mkv" &>/dev/null &')
+def printData(streams, table=False):
+
+    if table:
+        print('| Stream | URL |')
+        print('|-----|-----|')
+
+    for name in streams:
+
+        url = streams[name]
+
+        if table:
+            print(f'| {name} | https://www.twitch.tv/{url} |')
+        else:
+            print(
+                f'streamlink https://www.twitch.tv/{url} best --output "/mnt/pool/tempdownloads/vods/ALGS PL2 Week 1/tosort/ALGS PL2 Week 1 - {name} - ' + '{time:%Y-%m-%d}.mkv" &>/dev/null &')
 
     print(len(streams))
+
+if __name__ == '__main__':
+    url = "https://www.twitch.tv/playapex/commandcenter"
+    streams = {"NiceWigg": 'nicewigg'}
+    ignoreList = ['playapex', 'bbl spanish', 'bbl portuguese',
+                  'nicewigg b stream', 'rage japanese',
+                  'maincast', 'fps thai', '4gamers mandarin ']
+
+    data = getHTML(url)
+
+    soup = BeautifulSoup(data, features="html.parser")
+
+    streams = getStreamUrls(soup, streams, ignoreList)
+
+    printData(streams, False)
