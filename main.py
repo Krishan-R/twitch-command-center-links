@@ -53,7 +53,7 @@ if __name__ == '__main__':
     streams = {"NiceWigg": 'nicewigg'}
     ignoreList = ['playapex', 'bbl spanish', 'bbl portuguese',
                   'nicewigg b stream', 'rage japanese',
-                  'maincast', 'fps thai', '4gamers mandarin ']
+                  'maincast', 'fps thai', '4gamers mandarin ', 'cyberz', 'watch party']
 
     data = getHTML(url)
 
